@@ -1,5 +1,5 @@
 <template>
-  <div id="left-content-panel" class="h-full flex flex-col p-4 bg-slate-50/50">
+  <div id="left-content-panel" class="h-full flex flex-col p-4">
     <!-- Header Section -->
     <div class="flex justify-between items-center mb-4">
       <div>
