@@ -7,15 +7,19 @@
       <LeftContentPanel />
     </div>
     <div class="transition-all duration-300 ease-in-out h-dvh w-8/12">
-      <VueFlow :nodes="nodes" :edges="edges" :node-types="nodeTypes">
+      <VueFlow
+        :nodes="nodes"
+        :edges="edges"
+        @nodes-initialized="layoutGraph('TB')"
+      >
         <Background pattern-color="#aaa" :gap="16" />
         <template #node-special="specialNodeProps">
           <SpecialNode v-bind="specialNodeProps" />
         </template>
 
-        <template #edge-special="specialEdgeProps">
+        <!-- <template #edge-special="specialEdgeProps">
           <SpecialEdge v-bind="specialEdgeProps" />
-        </template>
+        </template> -->
 
         <!-- <ActDialog :show="actDialogState" /> -->
       </VueFlow>
@@ -31,130 +35,111 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, nextTick, onMounted } from "vue";
 import { VueFlow, useVueFlow } from "@vue-flow/core";
 import { Background } from "@vue-flow/background";
+import { useLayout } from "./composables/useFlowLayout";
 
 import SpecialNode from "./components/SpecialNode.vue";
 import SpecialEdge from "./components/SpecialEdge.vue";
 import ActDialog from "./components/ActDialog.vue";
 import LeftContentPanel from "./components/LeftContentPanel.vue";
 import RightContentPanel from "./components/RightContentPanel.vue";
-
-const nodes = ref([
-  {
-    id: "1",
-    type: "special",
-    position: { x: 250, y: 5 },
-    data: {
-      label: "ผู้อำนวยการฝ่ายพัฒนาระบบ",
-      type: "ผู้บริหาร",
-      profiles: [
-        { avatar: "/avatars/1.jpg" },
-        { avatar: "/avatars/2.jpg" },
-        { avatar: "/avatars/3.jpg" },
-        { avatar: "/avatars/4.jpg" },
-        { avatar: "/avatars/5.jpg" },
-      ],
-      manpower: {
-        current: 238,
-        total: 238,
-      },
-    },
-  },
-  {
-    id: "2",
-    type: "special",
-    position: { x: 100, y: 100 },
-    data: {
-      label: "หัวหน้าทีมพัฒนา Frontend",
-      type: "หัวหน้างาน",
-      profiles: [
-        { avatar: "/avatars/2.jpg" },
-        { avatar: "/avatars/3.jpg" },
-        { avatar: "/avatars/4.jpg" },
-      ],
-      manpower: {
-        current: 82,
-        total: 82,
-      },
-    },
-  },
-  {
-    id: "3",
-    type: "special",
-    position: { x: 400, y: 100 },
-    data: {
-      label: "หัวหน้าทีมพัฒนา Backend",
-      type: "หัวหน้างาน",
-      profiles: [
-        { avatar: "/avatars/1.jpg" },
-        { avatar: "/avatars/2.jpg" },
-        { avatar: "/avatars/3.jpg" },
-      ],
-      manpower: {
-        current: 31,
-        total: 31,
-      },
-    },
-  },
-]);
-
-const edges = ref([
-  {
-    id: "e1-2",
-    source: "1",
-    target: "2",
-    type: "special",
-    data: {
-      percentage: 100,
-    },
-  },
-  {
-    id: "e1-3",
-    source: "1",
-    target: "3",
-    type: "special",
-    data: {
-      percentage: 100,
-    },
-  },
-]);
-
-const { getSelectedNodes, fitView } = useVueFlow();
-
+import { nodeEdgeData } from "./utils/nodeEdgeData";
+import { preprocessRawEdgeDataHelper } from "./utils/selectNodeHelper";
 const showLeftPanel = ref(true);
 const showRightPanel = ref(false);
 
+const { layout } = useLayout();
+const nodes = ref([]);
+const edges = ref([]);
+const actDialogState = ref(false);
+
+onMounted(() => {
+  const { edges: processedEdges } = preprocessRawEdgeDataHelper(
+    nodeEdgeData.edges
+  );
+
+  nodes.value = nodeEdgeData.nodes;
+  edges.value = processedEdges;
+  console.log(edges.value);
+});
+
+const { getSelectedNodes, fitView, findNode } = useVueFlow();
+
+async function layoutGraph(direction) {
+  nodes.value = layout(nodes.value, edges.value, direction);
+
+  nextTick(() => {
+    fitView();
+  });
+}
+
 watch(getSelectedNodes, (gn) => selectNodesHandler(gn));
 
+let lastSelectedNode = null;
 function selectNodesHandler(gn) {
-  console.log(gn);
   if (gn.length > 0) {
-    fitNode(gn[0].id);
-    actDialogState.value = true;
+    lastSelectedNode = gn[0]["id"];
+    selectSelectedNode(lastSelectedNode);
+    // actDialogState.value = true;
     showLeftPanel.value = false;
     showRightPanel.value = true;
   } else {
+    removeSelectedNodes();
+    zoomOutToParent(lastSelectedNode, "pair");
+    lastSelectedNode = null;
     showLeftPanel.value = true;
     showRightPanel.value = false;
   }
 }
+
+function selectSelectedNode(selectedNodeId) {
+  const _n = findNode(selectedNodeId);
+
+  console.log(_n);
+
+  fitNode(selectedNodeId);
+}
+
+function removeSelectedNodes() {}
 
 function fitNode(nodeId) {
   fitView({
     nodes: [nodeId],
     offset: { x: 0, y: -100 },
     padding: 0,
-    duration: 500,
+    duration: 1000,
   });
 }
 
-const actDialogState = ref(false);
+function zoomOutToParent(focusChildNodeId, focusType) {
+  try {
+    if (!focusChildNodeId) {
+      return;
+    }
 
-const nodeTypes = {
-  special: SpecialNode,
-};
+    if (focusType === "pair") {
+      let pathing = undefined;
+      const _ed = Object.values(edges.value);
+      for (let i = 0; i < _ed.length; i++) {
+        if (_ed[i]["target"] === focusChildNodeId) {
+          pathing = _ed[i];
+          break;
+        }
+      }
+
+      if (pathing) {
+        fitView({
+          nodes: [pathing["source"], pathing["target"]],
+          duration: 500,
+        });
+      }
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
 </script>
 
 <style>

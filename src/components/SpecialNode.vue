@@ -1,8 +1,13 @@
 <script setup>
 import { computed } from "vue";
 import { Handle, Position } from "@vue-flow/core";
+import {
+  calculateFocusNodeRingClassHelper,
+  calculateProgressNodeHelper,
+} from "../utils/selectNodeHelper";
 
 const props = defineProps({
+  selected: { type: Boolean, default: false },
   position: {
     type: Object,
     required: true,
@@ -14,8 +19,7 @@ const props = defineProps({
 });
 
 const progressPercentage = computed(() => {
-  const { current, total } = props.data.manpower;
-  return (current / total) * 100;
+  return props.data.progress;
 });
 
 const getInitial = (index) => {
@@ -40,7 +44,12 @@ const getLocation = computed(() => {
 <template>
   <div
     id="sp_node"
-    class="w-[280px] p-3 rounded-md bg-white border border-slate-300 hover:shadow-sm transition-shadow"
+    :class="[
+      'w-[200px] p-3 rounded-md bg-white hover:shadow-sm transition-shadow',
+      selected
+        ? calculateFocusNodeRingClassHelper(progressPercentage)
+        : 'border border-slate-300 ',
+    ]"
   >
     <!-- Title -->
     <h3 class="font-medium text-[15px] text-slate-800 mb-1">
@@ -68,7 +77,7 @@ const getLocation = computed(() => {
       </div>
       <!-- Member Count -->
       <span class="text-xs text-slate-600 ml-2">
-        {{ data.manpower?.current || 0 }} คน
+        {{ Math.round(data.progress) }}%
       </span>
     </div>
 
@@ -76,7 +85,10 @@ const getLocation = computed(() => {
     <div class="h-1 bg-slate-100 rounded-full overflow-hidden">
       <div
         class="h-full bg-slate-400/60 rounded-full transition-all"
-        :style="{ width: `${progressPercentage}%` }"
+        :style="
+          `width: ${progressPercentage}%;` +
+          calculateProgressNodeHelper(progressPercentage)
+        "
       ></div>
     </div>
 

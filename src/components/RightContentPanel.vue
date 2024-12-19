@@ -35,6 +35,10 @@
       <!-- Statistics Cards -->
       <div class="grid grid-cols-2 gap-3 p-4 border-b border-slate-200">
         <div class="bg-white p-3 rounded-lg border border-slate-200">
+          <div class="text-xs text-slate-500 mb-1">อวามคืบหน้า</div>
+          <div class="font-medium text-slate-800">{{ position.progress }}%</div>
+        </div>
+        <div class="bg-white p-3 rounded-lg border border-slate-200">
           <div class="text-xs text-slate-500 mb-1">อายุเฉลี่ย</div>
           <div class="font-medium text-slate-800">42 ปี</div>
         </div>
