@@ -7,6 +7,10 @@ import {
 } from "../utils/selectNodeHelper";
 
 const props = defineProps({
+  id: {
+    type: String,
+    required: true,
+  },
   selected: { type: Boolean, default: false },
   position: {
     type: Object,
@@ -51,6 +55,13 @@ const getLocation = computed(() => {
         : 'border border-slate-300 ',
     ]"
   >
+    <div
+      v-if="id === '1'"
+      class="absolute w-[200px] text-center -top-[100px] right-0"
+    >
+      <div class="text-[35px]">แผนผังองค์กร</div>
+      <div class="text-[28px]">ฝ่ายพัฒนาระบบ</div>
+    </div>
     <!-- Title -->
     <h3 class="font-medium text-[15px] text-slate-800 mb-1">
       {{ data.label }}

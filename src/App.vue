@@ -97,8 +97,6 @@ function selectNodesHandler(gn) {
 function selectSelectedNode(selectedNodeId) {
   const _n = findNode(selectedNodeId);
 
-  console.log(_n);
-
   fitNode(selectedNodeId);
 }
 
