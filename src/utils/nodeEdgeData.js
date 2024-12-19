@@ -16,14 +16,14 @@ const nodes = [
     data: {
       label: "ผู้อำนวยการฝ่ายพัฒนาระบบ",
       type: "ผู้บริหาร",
+      maxProfiles: 5,
       profiles: [
         { avatar: "/avatars/1.jpg" },
         { avatar: "/avatars/2.jpg" },
         { avatar: "/avatars/3.jpg" },
         { avatar: "/avatars/4.jpg" },
-        { avatar: "/avatars/5.jpg" },
       ],
-      progress: Math.floor(Math.random() * 100),
+      progress: Math.floor((4 / 5) * 100),
     },
   },
   {
@@ -33,12 +33,13 @@ const nodes = [
     data: {
       label: "หัวหน้าทีมพัฒนา Frontend",
       type: "หัวหน้างาน",
+      maxProfiles: 3,
       profiles: [
         { avatar: "/avatars/2.jpg" },
         { avatar: "/avatars/3.jpg" },
         { avatar: "/avatars/4.jpg" },
       ],
-      progress: Math.floor(Math.random() * 100),
+      progress: Math.floor((3 / 3) * 100),
     },
   },
   {
@@ -48,12 +49,13 @@ const nodes = [
     data: {
       label: "หัวหน้าทีมพัฒนา Backend",
       type: "หัวหน้างาน",
+      maxProfiles: 5,
       profiles: [
         { avatar: "/avatars/1.jpg" },
         { avatar: "/avatars/2.jpg" },
         { avatar: "/avatars/3.jpg" },
       ],
-      progress: Math.floor(Math.random() * 100),
+      progress: Math.floor((3 / 5) * 100),
     },
   },
   {
@@ -63,8 +65,9 @@ const nodes = [
     data: {
       label: "หัวหน้าทีมทดสอบระบบ",
       type: "หัวหน้างาน",
+      maxProfiles: 2,
       profiles: [{ avatar: "/avatars/4.jpg" }, { avatar: "/avatars/5.jpg" }],
-      progress: 100,
+      progress: Math.floor((2 / 2) * 100),
     },
   },
   {
@@ -74,12 +77,13 @@ const nodes = [
     data: {
       label: "หัวหน้าทีมวิเคราะห์ระบบ",
       type: "หัวหน้างาน",
+      maxProfiles: 6,
       profiles: [
         { avatar: "/avatars/1.jpg" },
         { avatar: "/avatars/3.jpg" },
         { avatar: "/avatars/5.jpg" },
       ],
-      progress: Math.floor(Math.random() * 100),
+      progress: Math.floor((3 / 6) * 100),
     },
   },
   {
@@ -89,8 +93,9 @@ const nodes = [
     data: {
       label: "หัวหน้าทีมดูแลระบบ",
       type: "หัวหน้างาน",
+      maxProfiles: 10,
       profiles: [{ avatar: "/avatars/2.jpg" }, { avatar: "/avatars/4.jpg" }],
-      progress: Math.floor(Math.random() * 100),
+      progress: Math.floor((2 / 10) * 100),
     },
   },
 ];

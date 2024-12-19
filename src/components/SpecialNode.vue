@@ -57,13 +57,13 @@ const getLocation = computed(() => {
   >
     <div
       v-if="id === '1'"
-      class="absolute w-[200px] text-center -top-[100px] right-0"
+      class="absolute w-[200px] text-center -top-[140px] right-0"
     >
       <div class="text-[35px]">แผนผังองค์กร</div>
       <div class="text-[28px]">ฝ่ายพัฒนาระบบ</div>
     </div>
     <!-- Title -->
-    <h3 class="font-medium text-[15px] text-slate-800 mb-1">
+    <h3 class="font-medium text-[15px] text-slate-800 mb-1 truncate">
       {{ data.label }}
     </h3>
 
@@ -71,12 +71,9 @@ const getLocation = computed(() => {
     <p class="text-slate-500 text-[13px] mb-2">{{ getLocation }}</p>
 
     <!-- Profile Letters Stack & Count -->
-    <div class="flex items-center gap-1 mb-2">
+    <div class="flex items-center justify-between gap-1 mb-2">
       <div class="flex -space-x-2">
-        <template
-          v-for="(profile, index) in (data.profiles || []).slice(0, 5)"
-          :key="index"
-        >
+        <template v-for="(profile, index) in data.profiles || []" :key="index">
           <div
             class="w-6 h-6 rounded-full border border-white flex items-center justify-center text-xs font-medium relative"
             :class="avatarColors[index % avatarColors.length]"
@@ -88,7 +85,7 @@ const getLocation = computed(() => {
       </div>
       <!-- Member Count -->
       <span class="text-xs text-slate-600 ml-2">
-        {{ Math.round(data.progress) }}%
+        {{ data.profiles.length }} / {{ data.maxProfiles }} คน
       </span>
     </div>
 

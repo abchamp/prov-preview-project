@@ -17,6 +17,9 @@ export default {
         "mm-base-one": MM_NODE_COLORS.BASE_ONE_NUM,
         "mm-base-two": MM_NODE_COLORS.BASE_TWO_NUM,
       },
+      fontFamily: {
+        sans: ["Sarabun", "system-ui", "sans-serif"],
+      },
     },
   },
   plugins: [],

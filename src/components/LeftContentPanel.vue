@@ -95,8 +95,8 @@
           </div>
           <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
             <div
-              class="h-full bg-amber-400/80 rounded-full transition-all"
-              style="width: 75%"
+              class="h-full rounded-full transition-all"
+              :style="`width: 75%;` + calculateProgressNodeHelper(75)"
             ></div>
           </div>
         </div>
@@ -131,8 +131,8 @@
           </div>
           <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
             <div
-              class="h-full bg-emerald-400/80 rounded-full transition-all"
-              style="width: 100%"
+              class="h-full rounded-full transition-all"
+              :style="`width: 100%;` + calculateProgressNodeHelper(100)"
             ></div>
           </div>
         </div>
@@ -141,4 +141,6 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { calculateProgressNodeHelper } from "../utils/selectNodeHelper";
+</script>
