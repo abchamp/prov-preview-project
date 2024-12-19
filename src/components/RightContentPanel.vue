@@ -1,5 +1,5 @@
 <template>
-  <div id="right-content-panel" class="h-dvh bg-slate-50/50">
+  <div id="right-content-panel" class="h-full bg-slate-50/50">
     <!-- Header Section -->
     <div class="sticky top-0 bg-white border-b border-slate-200 p-4 space-y-3">
       <div class="flex items-center justify-between">
@@ -14,7 +14,7 @@
     </div>
 
     <!-- Content Scrollable Area -->
-    <div class="overflow-y-auto h-[calc(100vh-80px)]">
+    <div class="overflow-y-auto h-[calc(100vh-10rem)]">
       <!-- Position Requirements -->
       <div class="p-4 border-b border-slate-200">
         <h3 class="text-sm font-medium text-slate-700 mb-2">
