@@ -23,20 +23,20 @@
             class="flex items-center text-base py-4 gap-4 px-8 cursor-pointer hover:bg-gray-100 active:bg-gray-200 transition-colors duration-150"
           >
             <PlusIcon class="w-6 h-6" />
-            เพิ่มหน่วยงาน
+            เพิ่มตำแหน่ง
           </div>
           <div
             class="flex items-center text-base py-4 gap-4 px-8 cursor-pointer hover:bg-gray-100 active:bg-gray-200 transition-colors duration-150"
           >
             <ArrowPathIcon class="w-6 h-6" />
-            แก้ไขหน่วยงาน
+            แก้ไขตำแหน่ง
           </div>
 
           <div
             class="flex items-center text-base py-4 gap-4 px-8 text-red-500 cursor-pointer hover:bg-gray-100 active:bg-gray-200 transition-colors duration-150"
           >
             <TrashIcon class="w-6 h-6" />
-            ลบหน่วยงาน
+            ลบตำแหน่ง
           </div>
         </div>
       </TransitionChild>
