@@ -6,7 +6,7 @@
     >
       <LeftContentPanel />
     </div>
-    <div class="transition-all duration-300 ease-in-out h-dvh w-8/12">
+    <div class="transition-all duration-300 ease-in-out h-dvh w-8/12 relative">
       <VueFlow
         :nodes="nodes"
         :edges="edges"
@@ -20,9 +20,8 @@
         <!-- <template #edge-special="specialEdgeProps">
           <SpecialEdge v-bind="specialEdgeProps" />
         </template> -->
-
-        <!-- <ActDialog :show="actDialogState" /> -->
       </VueFlow>
+      <ActDialog name="actDialog" :show="actDialogState" />
     </div>
 
     <div
@@ -82,7 +81,7 @@ function selectNodesHandler(gn) {
   if (gn.length > 0) {
     lastSelectedNode = gn[0]["id"];
     selectSelectedNode(lastSelectedNode);
-    // actDialogState.value = true;
+    actDialogState.value = true;
     showLeftPanel.value = false;
     showRightPanel.value = true;
   } else {
@@ -90,6 +89,7 @@ function selectNodesHandler(gn) {
     zoomOutToParent(lastSelectedNode, "pair");
     lastSelectedNode = null;
     showLeftPanel.value = true;
+    actDialogState.value = false;
     showRightPanel.value = false;
   }
 }
