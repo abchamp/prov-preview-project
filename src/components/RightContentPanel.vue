@@ -1,130 +1,105 @@
 <template>
-  <div id="right-content-panel" class="h-full bg-slate-50/50">
-    <!-- Header Section -->
-    <div class="sticky top-0 bg-white border-b border-slate-200 p-4 space-y-3">
-      <div class="flex items-center justify-between">
-        <h2 class="text-lg font-semibold text-slate-800">
-          {{ position.label }}
-        </h2>
+  <div class="h-full bg-slate-50/50">
+    <!-- Header -->
+    <div class="sticky top-0 bg-white border-b border-slate-200 p-4">
+      <div class="flex items-start justify-between">
+        <div class="flex items-center gap-4">
+          <img
+            :src="person.avatar"
+            :alt="person.name"
+            class="w-16 h-16 rounded-full object-cover border-2 border-slate-200"
+          />
+          <div>
+            <h2 class="text-lg font-semibold text-slate-800">
+              {{ person.name }}
+            </h2>
+            <p class="text-slate-600">{{ position.title }}</p>
+            <span
+              class="text-sm px-2 py-1 bg-sky-50 text-sky-600 rounded-full mt-1 inline-block"
+            >
+              {{ person.rank }}
+            </span>
+          </div>
+        </div>
         <button class="p-2 hover:bg-slate-100 rounded-full">
           <XMarkIcon class="w-5 h-5 text-slate-400" />
         </button>
       </div>
-      <p class="text-sm text-slate-600">{{ position.description }}</p>
     </div>
 
-    <!-- Content Scrollable Area -->
-    <div class="overflow-y-auto h-[calc(100vh-10rem)]">
-      <!-- Position Requirements -->
-      <div class="p-4 border-b border-slate-200">
-        <h3 class="text-sm font-medium text-slate-700 mb-2">
-          คุณสมบัติตำแหน่ง
+    <!-- Content -->
+    <div class="p-4 space-y-6">
+      <!-- ข้อมูลส่วนตัว -->
+      <section>
+        <h3 class="text-sm font-medium text-slate-700 mb-3">ข้อมูลส่วนตัว</h3>
+        <div class="bg-white p-4 rounded-lg border border-slate-200 space-y-3">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-sm text-slate-500">อายุ</p>
+              <p class="font-medium text-slate-700">{{ person.age }} ปี</p>
+            </div>
+            <div>
+              <p class="text-sm text-slate-500">อายุราชการ</p>
+              <p class="font-medium text-slate-700">
+                {{ person.serviceYears }} ปี
+              </p>
+            </div>
+          </div>
+          <div>
+            <p class="text-sm text-slate-500">การศึกษา</p>
+            <p class="font-medium text-slate-700">{{ person.education }}</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ความเชี่ยวชาญ -->
+      <section>
+        <h3 class="text-sm font-medium text-slate-700 mb-3">ความเชี่ยวชาญ</h3>
+        <div class="flex flex-wrap gap-2">
+          <span
+            v-for="skill in person.specializations"
+            :key="skill"
+            class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-sm"
+          >
+            {{ skill }}
+          </span>
+        </div>
+      </section>
+
+      <!-- ใบรับรอง/วุฒิบัตร -->
+      <section>
+        <h3 class="text-sm font-medium text-slate-700 mb-3">
+          ใบรับรอง/วุฒิบัตร
         </h3>
-        <ul class="space-y-2">
-          <li
-            v-for="req in requirements"
-            :key="req.id"
-            class="flex items-center text-sm text-slate-600"
-          >
-            <CheckCircleIcon class="w-4 h-4 text-emerald-500 mr-2" />
-            {{ req.text }}
-          </li>
-        </ul>
-      </div>
-
-      <!-- Statistics Cards -->
-      <div class="grid grid-cols-2 gap-3 p-4 border-b border-slate-200">
-        <div class="bg-white p-3 rounded-lg border border-slate-200">
-          <div class="text-xs text-slate-500 mb-1">อวามคืบหน้า</div>
-          <div class="font-medium text-slate-800">{{ position.progress }}%</div>
-        </div>
-        <div class="bg-white p-3 rounded-lg border border-slate-200">
-          <div class="text-xs text-slate-500 mb-1">อายุเฉลี่ย</div>
-          <div class="font-medium text-slate-800">42 ปี</div>
-        </div>
-        <div class="bg-white p-3 rounded-lg border border-slate-200">
-          <div class="text-xs text-slate-500 mb-1">อายุราชการเฉลี่ย</div>
-          <div class="font-medium text-slate-800">15 ปี</div>
-        </div>
-        <div class="bg-white p-3 rounded-lg border border-slate-200">
-          <div class="text-xs text-slate-500 mb-1">ระดับเฉลี่ย</div>
-          <div class="font-medium text-slate-800">ชำนาญการพิเศษ</div>
-        </div>
-        <div class="bg-white p-3 rounded-lg border border-slate-200">
-          <div class="text-xs text-slate-500 mb-1">อัตราว่าง</div>
-          <div class="font-medium text-slate-800">2 ตำแหน่ง</div>
-        </div>
-      </div>
-
-      <!-- Personnel List -->
-      <div class="p-4">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-sm font-medium text-slate-700">บุคลากรในตำแหน่ง</h3>
-          <button
-            class="text-xs bg-sky-50 text-sky-600 px-2.5 py-1.5 rounded-full hover:bg-sky-100"
-          >
-            + เพิ่มบุคลากร
-          </button>
-        </div>
-
-        <!-- Personnel Cards -->
-        <div class="space-y-3">
+        <div class="space-y-2">
           <div
-            v-for="person in personnel"
-            :key="person.id"
-            class="bg-white p-3 rounded-lg border border-slate-200 space-y-3"
+            v-for="cert in person.certifications"
+            :key="cert"
+            class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200"
           >
-            <div class="flex items-center gap-3">
-              <img
-                :src="person.avatar"
-                :alt="person.name"
-                class="w-10 h-10 rounded-full object-cover border border-slate-200"
-              />
-              <div class="flex-1 min-w-0">
-                <h4 class="text-sm font-medium text-slate-800 truncate">
-                  {{ person.name }}
-                </h4>
-                <p class="text-xs text-slate-500">{{ person.position }}</p>
-              </div>
-              <button class="p-1.5 hover:bg-red-50 rounded-full group">
-                <TrashIcon
-                  class="w-4 h-4 text-slate-400 group-hover:text-red-500"
-                />
-              </button>
-            </div>
-            <div class="flex gap-2">
-              <span
-                class="text-xs px-2 py-1 rounded-full bg-slate-100 text-slate-600"
-              >
-                ระดับ {{ person.level }}
-              </span>
-              <span
-                class="text-xs px-2 py-1 rounded-full bg-slate-100 text-slate-600"
-              >
-                อายุราชการ {{ person.experience }} ปี
-              </span>
-            </div>
+            <CheckCircleIcon class="w-5 h-5 text-emerald-500" />
+            <span class="text-slate-700">{{ cert }}</span>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Request Section -->
-      <div class="p-4 border-t border-slate-200">
-        <div class="bg-amber-50 border border-amber-200 rounded-lg p-3">
-          <div class="flex items-center gap-2 mb-2">
-            <ClockIcon class="w-4 h-4 text-amber-500" />
-            <h3 class="text-sm font-medium text-amber-800">คำร้องขอบรรจุ</h3>
+      <!-- ประวัติการทำงาน -->
+      <section>
+        <h3 class="text-sm font-medium text-slate-700 mb-3">ประวัติการทำงาน</h3>
+        <div
+          class="bg-white rounded-lg border border-slate-200 divide-y divide-slate-200"
+        >
+          <div v-for="history in workHistory" :key="history.id" class="p-3">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="font-medium text-slate-700">{{ history.position }}</p>
+                <p class="text-sm text-slate-500">{{ history.department }}</p>
+              </div>
+              <span class="text-xs text-slate-500">{{ history.period }}</span>
+            </div>
           </div>
-          <p class="text-xs text-amber-700 mb-3">
-            มีคำร้องขอบรรจุ 3 รายการที่รอการพิจารณา
-          </p>
-          <button
-            class="w-full bg-amber-100 hover:bg-amber-200 text-amber-700 text-sm py-2 rounded-md"
-          >
-            ดูคำร้องทั้งหมด
-          </button>
         </div>
-      </div>
+      </section>
     </div>
   </div>
 </template>
@@ -140,33 +115,39 @@ import {
 
 // ข้อมูลจำลอง
 const position = ref({
-  label: "หัวหน้าทีมพัฒนา Frontend",
-  description:
-    "ดูแลทีมพัฒนา Frontend และออกแบบ User Interface รวมถึงประสานงานกับทีม UX/UI",
+  title: "หัวหน้าทีมพัฒนา Frontend",
 });
 
-const requirements = ref([
-  { id: 1, text: "ประสบการณ์บริหารทีม 3 ปีขึ้นไป" },
-  { id: 2, text: "ทักษะการเขียนโปรแกรมขั้นสูง" },
-  { id: 3, text: "ความเชี่ยวชาญด้าน Vue.js และ React" },
-]);
+const person = ref({
+  name: "นางสาวสมหญิง รักเรียน",
+  rank: "ชำนาญการพิเศษ",
+  avatar:
+    "https://api.dicebear.com/7.x/avataaars/svg?seed=สมหญิง&backgroundColor=b6e3f4",
+  age: 38,
+  serviceYears: 12,
+  education: "ปริญญาตรี วิทยาการคอมพิวเตอร์",
+  specializations: ["Vue.js", "React", "UX/UI Design"],
+  certifications: ["AWS Certified Developer", "Professional Scrum Master"],
+});
 
-const personnel = ref([
+const workHistory = ref([
   {
     id: 1,
-    name: "นายสมชาย ใจดี",
-    position: "นักวิชาการคอมพิวเตอร์",
-    level: "ชำนาญการพิเศษ",
-    experience: 12,
-    avatar: "https://i.pravatar.cc/150?img=1",
+    position: "หัวหน้าทีมพัฒนา Frontend",
+    department: "ฝ่ายพัฒนาระบบ",
+    period: "2565 - ปัจจุบัน",
   },
   {
     id: 2,
-    name: "นางสาวสมหญิง รักเรียน",
-    position: "นักวิชาการคอมพิวเตอร์",
-    level: "ชำนาญการ",
-    experience: 8,
-    avatar: "https://i.pravatar.cc/150?img=2",
+    position: "นักพัฒนาระบบอาวุโส",
+    department: "ฝ่ายพัฒนาระบบ",
+    period: "2562 - 2565",
+  },
+  {
+    id: 3,
+    position: "นักพัฒนาระบบ",
+    department: "ฝ่ายพัฒนาระบบ",
+    period: "2559 - 2562",
   },
 ]);
 </script>

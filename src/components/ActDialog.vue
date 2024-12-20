@@ -1,7 +1,7 @@
 <template>
   <TransitionRoot appear as="template" :show="show">
     <div
-      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 translate-y-10 w-full 2xl:max-w-lg max-w-md overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all"
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 translate-y-20 w-full 2xl:max-w-lg max-w-md overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all"
     >
       <TransitionChild
         as="template"

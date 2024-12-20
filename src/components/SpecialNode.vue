@@ -5,6 +5,12 @@ import {
   calculateFocusNodeRingClassHelper,
   calculateProgressNodeHelper,
 } from "../utils/selectNodeHelper";
+import {
+  AcademicCapIcon,
+  ClockIcon,
+  CalendarIcon,
+  UserPlusIcon,
+} from "@heroicons/vue/24/outline";
 
 const props = defineProps({
   id: {
@@ -43,73 +49,127 @@ const getLocation = computed(() => {
   const type = props.data.type;
   return `ตำแหน่ง${type}`;
 });
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString();
+};
 </script>
 
 <template>
   <div
     id="sp_node"
     :class="[
-      'w-[200px] p-3 rounded-md bg-white hover:shadow-sm transition-shadow',
+      'w-[280px] p-4 rounded-lg transition-shadow',
       selected
-        ? calculateFocusNodeRingClassHelper(progressPercentage)
-        : 'border border-slate-300 ',
+        ? calculateFocusNodeRingClassHelper(data.type)
+        : 'border border-slate-200',
+      data.type === 'vacant' ? 'bg-slate-50' : 'bg-white',
     ]"
   >
+    <!-- Department Stats for Root Node -->
     <div
       v-if="id === '1'"
-      class="absolute w-[200px] text-center -top-[140px] right-0"
+      class="absolute -top-[180px] left-1/2 transform -translate-x-1/2"
     >
-      <div class="text-[35px]">แผนผังองค์กร</div>
-      <div class="text-[28px]">ฝ่ายพัฒนาระบบ</div>
-    </div>
-    <!-- Title -->
-    <h3 class="font-medium text-[15px] text-slate-800 mb-1 truncate">
-      {{ data.label }}
-    </h3>
-
-    <!-- Location -->
-    <p class="text-slate-500 text-[13px] mb-2">{{ getLocation }}</p>
-
-    <!-- Profile Letters Stack & Count -->
-    <div class="flex items-center justify-between gap-1 mb-2">
-      <div class="flex -space-x-2">
-        <template v-for="(profile, index) in data.profiles || []" :key="index">
-          <div
-            class="w-6 h-6 rounded-full border border-white flex items-center justify-center text-xs font-medium relative"
-            :class="avatarColors[index % avatarColors.length]"
-            :style="{ zIndex: 5 - index }"
-          >
-            {{ getInitial(index) }}
-          </div>
-        </template>
-      </div>
-      <!-- Member Count -->
-      <span class="text-xs text-slate-600 ml-2">
-        {{ data.profiles.length }} / {{ data.maxProfiles }} คน
-      </span>
-    </div>
-
-    <!-- Progress Bar -->
-    <div class="h-1 bg-slate-100 rounded-full overflow-hidden">
       <div
-        class="h-full bg-slate-400/60 rounded-full transition-all"
-        :style="
-          `width: ${progressPercentage}%;` +
-          calculateProgressNodeHelper(progressPercentage)
-        "
-      ></div>
+        class="bg-white p-4 rounded-lg shadow-lg border border-slate-200 w-[600px]"
+      >
+        <h2 class="text-xl font-semibold text-center mb-4">
+          แผนผังอัตรากำลังฝ่ายพัฒนาระบบ
+        </h2>
+        <div class="grid grid-cols-3 gap-4">
+          <div class="text-center p-3 bg-sky-50 rounded-lg">
+            <div class="text-sky-600 text-2xl font-semibold">
+              {{ data.departmentStats.filledPositions }}/{{
+                data.departmentStats.totalPositions
+              }}
+            </div>
+            <div class="text-sky-700 text-sm">อัตรากำลัง</div>
+          </div>
+          <div class="text-center p-3 bg-sky-50 rounded-lg">
+            <div class="text-sky-600 text-2xl font-semibold">
+              {{ data.departmentStats.averageServiceYears }} ปี
+            </div>
+            <div class="text-sky-700 text-sm">อายุราชการเฉลี่ย</div>
+          </div>
+          <div class="text-center p-3 bg-sky-50 rounded-lg">
+            <div class="text-sky-600 text-2xl font-semibold">
+              <!-- {{ data.departmentStats.budgetUtilization }}% -->
+              XXX
+            </div>
+            <div class="text-sky-700 text-sm">การใช้งบประมาณ</div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Handles -->
+    <!-- Person Node -->
+    <template v-if="data.type === 'person'">
+      <div class="flex items-start gap-3 mb-3">
+        <img
+          :src="data.person.avatar"
+          :alt="data.person.name"
+          class="w-16 h-16 rounded-full object-cover border-2 border-slate-200"
+        />
+        <div class="flex-1 min-w-0">
+          <h3 class="font-medium text-slate-800 truncate">
+            {{ data.person.name }}
+          </h3>
+          <p class="text-sm text-slate-600">{{ data.person.rank }}</p>
+          <div
+            class="mt-1 text-xs font-medium px-2 py-1 bg-sky-50 text-sky-700 rounded-full inline-block"
+          >
+            {{ data.positionTitle }}
+          </div>
+        </div>
+      </div>
+      <div class="space-y-2 text-sm">
+        <div class="flex items-center gap-2 text-slate-600">
+          <AcademicCapIcon class="w-4 h-4" />
+          <span class="truncate">{{ data.person.education }}</span>
+        </div>
+        <div class="flex items-center gap-2 text-slate-600">
+          <ClockIcon class="w-4 h-4" />
+          <span>อายุราชการ {{ data.person.serviceYears }} ปี</span>
+        </div>
+      </div>
+    </template>
+
+    <!-- Vacant Position Node -->
+    <template v-else>
+      <div class="flex items-center gap-3 mb-3">
+        <div
+          class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center"
+        >
+          <UserPlusIcon class="w-6 h-6 text-slate-400" />
+        </div>
+        <div>
+          <h3 class="font-medium text-slate-800">{{ data.positionTitle }}</h3>
+          <p class="text-sm text-slate-500">ตำแหน่งว่าง</p>
+        </div>
+      </div>
+      <div class="text-xs text-slate-600 space-y-1">
+        <div class="flex items-center gap-2">
+          <CalendarIcon class="w-4 h-4" />
+          <span>วันที่ร้องขอ: {{ formatDate(data.requestDate) }}</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <ClockIcon class="w-4 h-4" />
+          <span>สถานะ: {{ data.requestStatus }}</span>
+        </div>
+      </div>
+    </template>
+
     <Handle
       type="target"
       :position="Position.Top"
-      class="!bg-slate-200 !w-2 !h-2"
+      class="!bg-slate-300 !w-2 !h-2"
     />
     <Handle
       type="source"
       :position="Position.Bottom"
-      class="!bg-slate-200 !w-2 !h-2"
+      class="!bg-slate-300 !w-2 !h-2"
     />
   </div>
 </template>
