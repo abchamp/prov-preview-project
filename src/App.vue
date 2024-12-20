@@ -28,7 +28,15 @@
       class="transition-all duration-300 ease-in-out border-l border-gray-300"
       :class="[showRightPanel ? 'w-4/12' : 'w-0 overflow-hidden']"
     >
-      <RightContentPanel />
+      <RightContentPanel
+        :selectedNode="selectedNode"
+        @close="
+          () => {
+            selectedNode = null;
+            showRightPanel = false;
+          }
+        "
+      />
     </div>
   </div>
 </template>
@@ -53,6 +61,7 @@ const { layout } = useLayout();
 const nodes = ref([]);
 const edges = ref([]);
 const actDialogState = ref(false);
+const selectedNode = ref(null);
 
 onMounted(() => {
   const { edges: processedEdges } = preprocessRawEdgeDataHelper(
@@ -80,6 +89,7 @@ let lastSelectedNode = null;
 function selectNodesHandler(gn) {
   if (gn.length > 0) {
     lastSelectedNode = gn[0]["id"];
+    selectedNode.value = gn[0];
     selectSelectedNode(lastSelectedNode);
     actDialogState.value = true;
     showLeftPanel.value = false;
