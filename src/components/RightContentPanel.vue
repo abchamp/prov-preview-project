@@ -1,5 +1,5 @@
 <template>
-  <div id="right-content-panel" class="h-full bg-slate-50/50">
+  <div id="right-content-panel" class="h-[calc(100vh-10rem)] bg-slate-50/50">
     <template v-if="selectedNode">
       <!-- Header สำหรับตำแหน่งว่าง -->
       <template v-if="isVacantPosition">
@@ -31,7 +31,7 @@
         </div>
 
         <!-- Content สำหรับตำแหน่งว่าง -->
-        <div class="p-4 space-y-4">
+        <div class="p-4 space-y-4 overflow-y-auto h-full">
           <!-- Search and Filters -->
           <div class="flex gap-2">
             <div class="flex-1">
@@ -77,70 +77,95 @@
           </div>
 
           <!-- Candidates Table -->
-          <div class="bg-white rounded-lg border border-slate-200">
-            <div class="overflow-x-auto">
-              <table class="w-full">
-                <thead>
-                  <tr class="border-b border-slate-200 bg-slate-50/50">
-                    <th
-                      class="px-4 py-3 text-left text-xs font-medium text-slate-500"
-                    >
-                      ชื่อ-นามสกุล
-                    </th>
-                    <th
-                      class="px-4 py-3 text-left text-xs font-medium text-slate-500"
-                    >
-                      ตำแหน่งปัจจุบัน
-                    </th>
-                    <th
-                      class="px-4 py-3 text-left text-xs font-medium text-slate-500"
-                    >
-                      ประสบการณ์
-                    </th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-200">
-                  <tr
-                    v-for="candidate in paginatedCandidates"
-                    :key="candidate.id"
-                    class="hover:bg-slate-50"
-                  >
-                    <td class="px-4 py-3">
-                      <div class="flex items-center gap-3">
-                        <img
-                          :src="candidate.avatar"
-                          :alt="`${candidate.firstName} ${candidate.lastName}`"
-                          class="w-8 h-8 rounded-full object-cover"
-                        />
-                        <div>
-                          <div>
-                            <span class="font-medium text-slate-700">{{
-                              candidate.firstName
-                            }}</span>
-                            <span class="font-medium text-slate-700 ml-1">{{
-                              candidate.lastName
-                            }}</span>
-                          </div>
-                          <div class="text-xs text-slate-500">
-                            {{ candidate.rank }}
-                          </div>
-                        </div>
+          <div class="space-y-4">
+            <!-- Candidate Cards -->
+            <div class="grid gap-4">
+              <div
+                v-for="candidate in paginatedCandidates"
+                :key="candidate.id"
+                class="bg-white rounded-lg border border-slate-200 p-4 hover:border-sky-200 hover:shadow-sm transition-all"
+              >
+                <!-- Header -->
+                <div class="flex items-start justify-between mb-3">
+                  <div class="flex items-center gap-3">
+                    <img
+                      :src="candidate.avatar"
+                      :alt="`${candidate.firstName} ${candidate.lastName}`"
+                      class="w-8 h-8 rounded-full object-cover"
+                    />
+                    <div>
+                      <div>
+                        <span class="font-medium text-slate-700">{{
+                          candidate.firstName
+                        }}</span>
+                        <span class="font-medium text-slate-700 ml-1">{{
+                          candidate.lastName
+                        }}</span>
                       </div>
-                    </td>
-                    <td class="px-4 py-3 text-sm text-slate-600">
+                      <div class="text-xs text-slate-500">
+                        {{ candidate.rank }}
+                      </div>
+                    </div>
+                  </div>
+                  <span
+                    class="text-xs px-2 py-1 bg-slate-100 text-slate-600 rounded-full"
+                  >
+                    {{ candidate.experience }} ปี
+                  </span>
+                </div>
+
+                <!-- Content -->
+                <div class="space-y-3">
+                  <!-- ตำแหน่งปัจจุบัน -->
+                  <div>
+                    <p class="text-xs text-slate-500 mb-1">ตำแหน่งปัจจุบัน</p>
+                    <p class="text-sm text-slate-700">
                       {{ candidate.currentPosition }}
-                    </td>
-                    <td class="px-4 py-3 text-sm text-slate-600">
-                      {{ candidate.experience }} ปี
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                    </p>
+                  </div>
+
+                  <!-- ความเชี่ยวชาญ -->
+                  <div>
+                    <p class="text-xs text-slate-500 mb-1">ความเชี่ยวชาญ</p>
+                    <div class="flex flex-wrap gap-1">
+                      <span
+                        v-for="skill in candidate.skills"
+                        :key="skill"
+                        class="px-2 py-0.5 bg-slate-50 text-slate-600 rounded text-xs"
+                      >
+                        {{ skill }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- สถิติ -->
+                  <div class="grid grid-cols-3 gap-2 pt-2">
+                    <div class="text-center p-2 bg-slate-50 rounded">
+                      <p class="text-xs text-slate-500">โครงการ</p>
+                      <p class="font-medium text-slate-700">
+                        {{ candidate.stats.projects }}
+                      </p>
+                    </div>
+                    <div class="text-center p-2 bg-slate-50 rounded">
+                      <p class="text-xs text-slate-500">การฝึกอบรม</p>
+                      <p class="font-medium text-slate-700">
+                        {{ candidate.stats.trainings }}
+                      </p>
+                    </div>
+                    <div class="text-center p-2 bg-slate-50 rounded">
+                      <p class="text-xs text-slate-500">ใบรับรอง</p>
+                      <p class="font-medium text-slate-700">
+                        {{ candidate.stats.certifications }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- Pagination -->
             <div
-              class="px-4 py-3 border-t border-slate-200 flex items-center justify-between"
+              class="px-4 py-3 bg-white border border-slate-200 rounded-lg flex items-center justify-between"
             >
               <div class="text-sm text-slate-500">
                 แสดง {{ startIndex + 1 }}-{{ endIndex }} จาก
@@ -372,6 +397,17 @@ const candidates = ref([
     rank: "ชำนาญการ",
     currentPosition: "นักทดสอบระบบ",
     experience: 6,
+    skills: [
+      "Automated Testing",
+      "Performance Testing",
+      "API Testing",
+      "Test Management",
+    ],
+    stats: {
+      projects: 15,
+      trainings: 8,
+      certifications: 3,
+    },
     avatar:
       "https://api.dicebear.com/7.x/avataaars/svg?seed=ทดสอบ&backgroundColor=b6e3f4",
   },
@@ -382,6 +418,12 @@ const candidates = ref([
     rank: "ปฏิบัติการ",
     currentPosition: "นักพัฒนาระบบอัตโนมัติ",
     experience: 4,
+    skills: ["Selenium", "Cypress", "Jenkins", "Docker"],
+    stats: {
+      projects: 12,
+      trainings: 6,
+      certifications: 2,
+    },
     avatar:
       "https://api.dicebear.com/7.x/avataaars/svg?seed=ออโตเมชั่น&backgroundColor=ffecb3",
   },
@@ -392,6 +434,12 @@ const candidates = ref([
     rank: "ชำนาญการ",
     currentPosition: "วิศวกรคุณภาพซอฟต์แวร์",
     experience: 7,
+    skills: ["Quality Assurance", "Test Planning", "Risk Analysis", "ISTQB"],
+    stats: {
+      projects: 20,
+      trainings: 10,
+      certifications: 4,
+    },
     avatar:
       "https://api.dicebear.com/7.x/avataaars/svg?seed=คุณภาพ&backgroundColor=c8e6c9",
   },
