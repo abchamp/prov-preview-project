@@ -5,6 +5,10 @@ const createEdge = (source, target, nodes) => ({
   type: "special",
   data: {
     positionTitle: nodes.find((n) => n.id === target).data.positionTitle,
+    progress:
+      nodes.find((n) => n.id === target).data.type === "vacant"
+        ? "vacant"
+        : 100,
   },
 });
 
@@ -252,7 +256,7 @@ const nodes = [
         name: "นายสุรชัย ระบบเยี่ยม",
         rank: "ชำนาญการ",
         avatar:
-          "https://api.dicebear.com/7.x/avataaars/svg?seed=สุรชัย&backgroundColor=dcedc8",
+          "https://api.dicebear.com/7.x/avataaars/svg?seed=สุรชัย&backgroundColor=b2dfdb",
         age: 36,
         serviceYears: 8,
         education: "ปริญญาตรี วิศวกรรมคอมพิวเตอร์",

@@ -44,6 +44,7 @@ export const FOCUS_EDGE_STYLE = {
   FINISH: {
     stroke: MM_NODE_COLORS.ACCENT_TWO_NUM,
     strokeWidth: FOCUS_EDGE_STROKE_WIDTH,
+    strokeDasharray: FOCUS_EDGE_STROKE_DASH,
   },
   MORE_THAN_HALF: {
     stroke: MM_NODE_COLORS.PRIMARY_FOUR_NUM,
@@ -60,16 +61,27 @@ export const FOCUS_EDGE_STYLE = {
     strokeWidth: FOCUS_EDGE_STROKE_WIDTH,
     strokeDasharray: FOCUS_EDGE_STROKE_DASH,
   },
+  VACANT: {
+    stroke: "#f97316",
+    strokeWidth: FOCUS_EDGE_STROKE_WIDTH - 1,
+    strokeDasharray: FOCUS_EDGE_STROKE_DASH,
+  },
 };
 
 export function getDefaultProgressAtEdgeHelper(progressNumber) {
   let o = { style: {}, animated: false };
-  let pn = progressNumber;
+  if (progressNumber === "vacant") {
+    o.style = FOCUS_EDGE_STYLE.VACANT;
+    return o;
+  }
+
+  let pn = Number(progressNumber);
   //
   if (pn >= 100) {
     o.style = {
       stroke: FOCUS_EDGE_STYLE.FINISH.stroke,
       strokeWidth: FOCUS_EDGE_STROKE_WIDTH - 1,
+      strokeDasharray: FOCUS_EDGE_STROKE_DASH,
     };
   } else if (pn >= 50) {
     o.style = {
